@@ -2,6 +2,8 @@ const fs = require('fs');
 const https =require('http'); 
 const { parse } = require('csv-parse');
 
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+
 var Book_Sold = []
 var parser_Order = parse({ columns: true }, function(err, Order) {
     Book_Sold = Order;
@@ -17,7 +19,7 @@ const app = express();
 app.get('/', (req, res) => {
     res.send('Hello world!!!');
 });
-app.post('/CATALOG_WEBSERVICE_IP', (req, res) => {
+app.get('/CATALOG_WEBSERVICE_IP', (req, res) => {
     let result = catalog.map(o => ({ id: parseInt(o.id), price: parseInt(o.price), tittle: o.tittle, quantity: parseInt(o.quantity), topic: o.topic }));
     res.send(result);
 });
@@ -51,7 +53,6 @@ res.on('end', () => {
 csvWriterOrder
     .writeRecords(Book_Sold)
     .then(() => console.log(``));
-res.send(Book_Sold);
 
 });
 })
